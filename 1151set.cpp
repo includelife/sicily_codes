@@ -53,7 +53,7 @@ void bfs(moban stdmoban,int max){
                         cout<<temp.s.length()<<"  "<<temp.s<<endl;
                         return;
                     }
-                    if(temp.s.length() > max)   cout<<"-1"<<endl;
+                    if(temp.s.length() > max)   {cout<<"-1"<<endl;return;}
                     if(myset.count(temp.status)==0){
                         qm.push(temp);
                         myset.insert(temp.status);
@@ -64,7 +64,7 @@ void bfs(moban stdmoban,int max){
 }
 int main()
 {   
-    freopen("1150input.txt","r",stdin);
+    //freopen("1150input.txt","r",stdin);
     int n;
     while(cin>>n && n!=-1){
         moban stdmoban;
