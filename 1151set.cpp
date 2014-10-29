@@ -28,10 +28,43 @@ string ope(string ps,int n){
         return x31+y31;
     }
 }
+void bfs(moban stdmoban,int max){
+    moban initial;
+    initial.status="12348765";
+    initial.s="";
+    queue<moban> qm;
 
+    qm.push(initial);
+    set<string> myset;
+    myset.insert(initial.status);
+
+    if(comp(initial.status,stdmoban.status)) {  cout<<"0 "<<endl;return;}
+        while(!qm.empty()){
+            for (int j = 1; j <= 3; ++j){
+                    moban temp=qm.front();
+                   // cout<<myset.size()<<" ";
+                    temp.status = ope(temp.status,j);
+
+                    if(j==1) temp.s += "A";
+                    else if(j==2) temp.s += "B";
+                    else if(j==3) temp.s += "C";
+
+                    if(comp(temp.status,stdmoban.status)){
+                        cout<<temp.s.length()<<"  "<<temp.s<<endl;
+                        return;
+                    }
+                    if(temp.s.length() > max)   cout<<"-1"<<endl;
+                    if(myset.count(temp.status)==0){
+                        qm.push(temp);
+                        myset.insert(temp.status);
+                    }
+                }
+                qm.pop();
+            }
+}
 int main()
 {   
-    freopen("input.txt","r",stdin);
+    freopen("1150input.txt","r",stdin);
     int n;
     while(cin>>n && n!=-1){
         moban stdmoban;
@@ -47,47 +80,7 @@ int main()
             cin>>y;
             stdmoban.status += y;
         }
-        moban initial;
-        initial.status="12348765";
-        initial.s="";
-        queue<moban> qm[n+1];
-
-        qm[0].push(initial);
-        set<string> myset;
-        myset.insert(initial.status);
-
-        bool success=false;
-        for (int i = 0; i < n; ++i)
-        {
-            if(i==0 && comp(initial.status,stdmoban.status)) {  success = true;cout<<"0  "<<endl;break;}
-            while(!qm[i].empty()){
-                for (int j = 1; j <= 3; ++j)
-                {
-                    moban temp=qm[i].front();
-                   // cout<<myset.size()<<" ";
-                    temp.status = ope(temp.status,j);
-
-                    if(j==3) qm[i].pop();
-                    if(j==1) temp.s += "A";
-                    else if(j==2) temp.s += "B";
-                    else if(j==3) temp.s += "C";
-
-                    if(comp(temp.status,stdmoban.status)){
-                        cout<<i+1<<"  "<<temp.s<<endl;
-                        success=true;
-                        break;
-                    }
-
-                    if(myset.count(temp.status)==0)  {
-                            qm[i+1].push(temp);
-                            myset.insert(temp.status);
-                    }
-                }
-                if(success) break;
-            }
-            if(success) break;
-        }
-        if(!success) cout<<"-1 "<<endl;
+        bfs(stdmoban,n);
     }
     return 0;
-}                                 
+}
