@@ -1,7 +1,6 @@
-#include<cstdio>
-#include<iostream>
-#include<queue>
-#include<set>
+#include <iostream>
+#include <queue>
+#include <map>
 using namespace std;
 typedef struct moban{
     string status;
@@ -28,21 +27,21 @@ string ope(string ps,int n){
         return x31+y31;
     }
 }
+moban initial;
+queue<moban> qm;
+map<string,string> mymap;
+map<string,string>::iterator it;
+
 void bfs(moban stdmoban,int max){
-    moban initial;
-    initial.status="12348765";
-    initial.s="";
-    queue<moban> qm;
-
-    qm.push(initial);
-    set<string> myset;
-    myset.insert(initial.status);
-
+    if(mymap.count(stdmoban.status) != 0) {
+        it = mymap.find(stdmoban.status);
+        cout<<it->second.length()<<" "<<it->second<<endl;
+        return;
+    }   
     if(comp(initial.status,stdmoban.status)) {  cout<<"0 "<<endl;return;}
         while(!qm.empty()){
             for (int j = 1; j <= 3; ++j){
                     moban temp=qm.front();
-                   // cout<<myset.size()<<" ";
                     temp.status = ope(temp.status,j);
 
                     if(j==1) temp.s += "A";
@@ -50,13 +49,14 @@ void bfs(moban stdmoban,int max){
                     else if(j==3) temp.s += "C";
 
                     if(comp(temp.status,stdmoban.status)){
-                        cout<<temp.s.length()<<"  "<<temp.s<<endl;
+                        cout<<temp.s.length()<<" "<<temp.s<<endl;
                         return;
                     }
                     if(temp.s.length() > max)   {cout<<"-1"<<endl;return;}
-                    if(myset.count(temp.status)==0){
+
+                    if(mymap.count(temp.status) == 0){
                         qm.push(temp);
-                        myset.insert(temp.status);
+                        mymap.insert(make_pair(temp.status,temp.s));
                     }
                 }
                 qm.pop();
@@ -64,7 +64,11 @@ void bfs(moban stdmoban,int max){
 }
 int main()
 {   
-    //freopen("1150input.txt","r",stdin);
+    freopen("1151input.txt","r",stdin);
+    initial.status="12348765";
+    initial.s="";
+    qm.push(initial);
+    mymap.insert(make_pair(initial.status,""));
     int n;
     while(cin>>n && n!=-1){
         moban stdmoban;
