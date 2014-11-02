@@ -1,6 +1,7 @@
 #include <iostream>
 #include <queue>
 #include <map>
+#include <cstdio>
 using namespace std;
 typedef struct moban{
     string status;
@@ -40,6 +41,7 @@ void bfs(moban stdmoban,int max){
     }   
     if(comp(initial.status,stdmoban.status)) {  cout<<"0 "<<endl;return;}
         while(!qm.empty()){
+
             for (int j = 1; j <= 3; ++j){
                     moban temp=qm.front();
                     temp.status = ope(temp.status,j);
