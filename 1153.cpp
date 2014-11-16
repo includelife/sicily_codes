@@ -1,61 +1,81 @@
 #include <iostream>
 #include <cstring>
+#include <algorithm>
 #include <vector>
 using namespace std;
-int maritx[65];
-bool visited[65];
+int ans[64];
+bool visited[64];
 int dirx[8]={1,2,2,1,-1,-2,-2,-1};
 int diry[8]={-2,-1,1,2,2,1,-1,-2};
-vector<int> st;
-int flag;
-void dfs(int x,int y,int cnt)
+int cal(int x, int y)
 {
-	if( cnt > 63) flag = 1;
-	if(flag == 1) {
-	while(!st.empty())
-	 	{
-	 		cout<<st.front()<<" ";
-	 		st.erase(st.begin());
-	 	}
-	 	cout<<endl;
-	 	return;
-	}
-
-	int n = x*8+y+1;
+	int cnt = 0;
 	for (int i = 0; i < 8; ++i)
 	{
-		int dx = x+dirx[i];
-		int dy = y+diry[i];
-		int sum = dx*8+dy+1;
-		if(dx >= 0 && dx <= 7 && dy >= 0 && dy <= 7 && !visited[sum]) 
-		{
-			visited[sum] = true;
-			st.push_back(sum);
-			dfs(dx,dy,cnt+1);
-			if(st.empty()) return;
-			st.pop_back();
-			visited[sum] = false;
-		}
+		int dx = x + dirx[i];
+		int dy = y + diry[i];  
+		int next = dx*8+dy+1;
+		if(dx>=0 && dx<8 && dy>=0 && dy<8 && !visited[next-1]) 	cnt++;
 	}
+	return cnt;
+}
+typedef struct coord
+{
+	int x,y;
+	int cnt;
+	coord(int X,int Y)
+	{
+		x = X;
+		y = Y;
+		cnt = cal(x,y); 
+	}
+};
+bool comp(coord a,coord b)
+{
+	return a.cnt < b.cnt;
+}
+bool dfs(int n,int dis)
+{
+	visited[n-1] = true;
+	ans[dis] = n;
+	if(dis >= 63) return true;
+	int i = (n-1)/8;
+	int j = (n-1)%8;
+	vector<coord> v;
+	for (int k = 0; k < 8; ++k)
+	{
+		int dx = i + dirx[k];
+		int dy = j + diry[k];
+		int next = dx*8+dy+1;
+		if(dx>=0 && dx<8 && dy>=0 && dy<8 && !visited[next-1])
+		{	
+			v.push_back(coord(dx,dy));
+		}
+	}	
+	sort(v.begin(),v.end(),comp);
+	for (int k = 0; k < v.size(); ++k)
+	{
+		int next = v[k].x*8+v[k].y+1;
+		if(dfs(next,dis+1)) return true;
+	}
+	visited[n-1] = false;
+	return false;
 }
 
 int main()
 {
 	int n;
-	for (int i = 1; i <= 64; ++i)
+	while(cin>>n && n != -1)
 	{
-		maritx[i] = i;
-	}
-	while(cin>>n && n!= -1){
-		if(n>=1 && n<=64)
+		if(n >= 1 && n <= 64)
 		{
 			memset(visited,false,sizeof(visited));
-			flag = 0;
-			st.push_back(n);
-			int i = (n-1)/8;
-			int j = n-(i*8)-1;
-			visited[n] = true;
-			dfs(i,j,1);
+			dfs(n,0);
+			for (int i = 0; i < 63; ++i)
+			{
+				cout<<ans[i]<<" ";
+			}
+			cout<<ans[63]<<endl;
 		}
 	}
 	return 0;
