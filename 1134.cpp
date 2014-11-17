@@ -10,7 +10,7 @@ struct Child
 };
 bool comp(Child x,Child y)
 {
-	return x.b < y.b;
+	return x.b > y.b;
 }
 int main()
 {
@@ -26,17 +26,17 @@ int main()
 			v.push_back(child); 
 		}
 		sort(v.begin(),v.end(),comp);
-		int i;
-		for (i = 0; i < n; ++i)
+		for (int i = n-1; i >= 0; i--)
 		{	
-
+			//cout<<v[i].b<<endl;
 			if(s >= v[i].b)	
 			{
-				s += v[i].a;		
+				s += v[i].a;
+				//cout<<s<<" "<<v.begin()->a<<" "<<v.begin()->b<<endl;
+				v.pop_back();   //用v.erase(v.begin())删除第一个元素，会越界，因为删除了元素，数组下标会前移
 			}
-			else break;
 		}
-		if(i == n) cout<<"YES"<<endl;
+		if(v.size() == 0) cout<<"YES"<<endl;
 		else cout<<"NO"<<endl;
 	}
 	return 0;
