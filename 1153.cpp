@@ -19,7 +19,7 @@ int cal(int x, int y)
 	}
 	return cnt;
 }
-typedef struct coord
+struct coord
 {
 	int x,y;
 	int cnt;
