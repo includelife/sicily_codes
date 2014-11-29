@@ -1,0 +1,6 @@
+# ROS------------------------
+. /opt/hku_drc_class_scripts/setup.sh
+# source /home/huzhp/drcsim_ws/install/setup.sh
+# export 
+# ROS_WORKSPACE=~/ros_workspace
+# ROS_WORKSPACE=/home/huzhp/ros_workspace/hku_drc_class_sysu/catkin/src
