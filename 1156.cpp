@@ -1,72 +1,62 @@
-#include<iostream>
-using namespace std;
-int id[10002],lcid[10002],rcid[10002];
-char data[10002];
-int t;
-
-typedef struct binary_tree
-{
+#include<cstdio>
+#define max 1001
+int n,id[max],lid[max],rid[max];
+char data[max];
+struct binary_Node{
 	int id;
-	char data;
-	struct binary_tree *lchild;
-	struct binary_tree *rchild;
+	char data;	
+	binary_Node *lchild,*rchild;
 };
 
-void print_tree(binary_tree *root)
+void print_tree(binary_Node *root)
 {
-	if(root == NULL) return;
-	if(root != NULL)
+	if(root==NULL) return;
+	if(root!=NULL)
 	{
-		cout<<root->data;
+		printf("%c",root->data);
 		print_tree(root->lchild);
-	 	print_tree(root->rchild);
+		print_tree(root->rchild);
 	}
 }
 
-binary_tree *create_tree(binary_tree *root,int pid)
+binary_Node *create_tree(int pid)
 {
-		root = new binary_tree;
+	binary_Node *root=NULL;
+	//Èç¹ûid!=0²Å½¨Á¢½Úµã£¬·ñÔò·µ»ØNULL 
+	if(pid!=0){
+		root = new binary_Node;
 		root->lchild = NULL;
 		root->rchild = NULL;
-		int k = 0;
-		for (int i = 0; i < t; ++i)
-		{
-			if(pid == id[i]) { k=i; break;}
+		//ÕÒµ½¸ù½ÚµãµÄÐòºÅ 
+		int k=0;
+		for(int i=0;i<n;i++){
+			if(pid==id[i]) {k=i;break;}
 		}
-
-		root->id = id[k];
-		if(data[k] >= 'A' && data[k] <='Z'){
-			root->data = data[k];
+		//½¨Á¢¸ù½Úµã 
+		root->id=id[k];
+		if(data[k]>='A' && data[k]<='Z'){
+			root->data=data[k];
 		}
-
-		if(lcid[k] != 0)
-		{
-			root->lchild = create_tree(root->lchild,lcid[k]);
-		}
-		if(rcid[k] != 0)
-		{
-			root->rchild = create_tree(root->rchild,rcid[k]);
-		}
-		return root;
+		//½¨Á¢×óÓÒ×ÓÊ÷ 
+		root->lchild=create_tree(lid[k]);
+		root->rchild=create_tree(rid[k]);
+	}
+	return root;
 }
 
 int main()
 {
-	freopen("input.txt","r",stdin);
-	while(cin>>t)
-	{
-		int r = 0;
-		for (int i = 0; i < t; ++i)
-		{
-			cin>>id[i]>>data[i]>>lcid[i]>>rcid[i];
-			r ^= id[i]^lcid[i]^rcid[i];  //æ‰¾å‡ºæ ¹èŠ‚ç‚¹
-		}
-		//cout<<r<<endl;
-		binary_tree *root;
- 		binary_tree *tree = create_tree(root,r);
-
- 		print_tree(tree);
- 		cout<<endl;
+	freopen("1156in.txt","r",stdin);
+	while(scanf("%d",&n)!=EOF){
+		int r =0;
+		for(int i=0;i<n;i++){
+			scanf("%d %c %d %d",&id[i],&data[i],&lid[i],&rid[i]);
+			//Óë0Òì»òÔËËã£¬ÕÒµ½Ö»³öÏÖ¹ýÒ»´ÎµÄid£¬Õâ¸öidÎª¸ù½Úµãid 
+			r ^= id[i]^lid[i]^rid[i];
+		}		
+		binary_Node *root = create_tree(r);
+		print_tree(root);
+		printf("\n");
 	}
-	return 0;
+	return 0;	
 }
